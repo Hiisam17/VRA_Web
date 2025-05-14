@@ -1,14 +1,49 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, CheckCircle, ChevronRight, Star } from "lucide-react";
+import { Eye, EyeOff, CheckCircle, ChevronRight, Star, User, User2, X } from "lucide-react";
 import logo from "./img/logo.png";
+import Logo1 from "./img/Logo1.png";
 import anh1 from "./img/anh1.png";
 import anh2 from "./img/anh2.jpg";
 import anh3 from "./img/anh3.jpg";
+import Manage from "./img/Manage.jpg";
+import dotor from "./img/dotor.jpg";
+import AI from "./img/AI.png";
+import googleLogo from "./img/LogoGoogle.webp";
 
 export default function App() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [registerData, setRegisterData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: ""
+  });
+
+  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setRegisterData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const scrollToLoginForm = () => {
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+      loginForm.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const style = {
     backgroundColor: "#19395E",
@@ -21,7 +56,7 @@ export default function App() {
       <div className="flex items-center w-full px-20 py-4 justify-between">
         <div className="flex items-center space-x-10">
           <img
-            src={logo}
+            src={Logo1}
             alt="VRA Logo"
             className="h-16 object-contain"
           />
@@ -36,10 +71,16 @@ export default function App() {
           </div>
         </div>
         <div className="flex items-center space-x-6">
-          <button className="text-blue-600 text-2xl font-bold px-4 py-2 rounded hover:bg-blue-50 transition-all duration-200">
+          <button 
+            className="text-blue-600 text-2xl font-bold px-4 py-2 rounded hover:bg-blue-50 transition-all duration-200"
+            onClick={scrollToLoginForm}
+          >
             Đăng nhập
           </button>
-          <button className="bg-red-500 text-white font-bold text-2xl px-6 py-2 rounded hover:bg-red-600 transition-all duration-200">
+          <button 
+            className="bg-red-500 text-white font-bold text-2xl px-6 py-2 rounded hover:bg-red-600 transition-all duration-200"
+            onClick={() => setShowRegisterForm(true)}
+          >
             Đăng ký
           </button>
         </div>
@@ -80,7 +121,7 @@ export default function App() {
           </div>
 
           {/* Login Card */}
-          <div className="bg-blue-600 p-8 rounded-3xl shadow-lg">
+          <div id="login-form" className="bg-blue-600 p-8 rounded-3xl shadow-lg">
             <div className="bg-white p-8 rounded-3xl">
               <h2 className="text-gray-900 text-lg font-bold mb-6">
                 Học giao tiếp và khám phá thế giới với VRA
@@ -142,17 +183,22 @@ export default function App() {
 
                 <button className="bg-gray-100 w-full py-2 rounded flex items-center justify-center hover:bg-gray-200 transform hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md">
                   <img
-                    src="/api/placeholder/18/18"
+                    src={googleLogo}
                     alt="Google"
-                    className="h-4 w-4"
+                    className="h-5 w-5 mr-2"
                   />
+                  <span className="text-gray-700">Đăng nhập với Google</span>
                 </button>
               </div>
 
               <div className="text-center mb-6">
                 <span className="text-gray-900 text-xs">
                   Nếu bạn chưa có tài khoản, vui lòng{" "}
-                  <a href="#" className="text-blue-600">
+                  <a 
+                    href="#" 
+                    className="text-blue-600"
+                    onClick={() => setShowRegisterForm(true)}
+                  >
                     Đăng ký
                   </a>
                 </span>
@@ -232,14 +278,17 @@ export default function App() {
               Mỗi khi kết thúc buổi học hệ thống sẽ tự động ghi lại video quá
               trình học tập của trẻ.
             </p>
-            <button className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg">
+            <button 
+              className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
+              onClick={scrollToTop}
+            >
               Tìm hiểu ngay
               <ChevronRight className="ml-2 h-5 w-5" />
             </button>
           </div>
           <div className="w-1/2">
             <img
-              src={anh1}
+              src={Manage}
               alt="Dashboard"
               className="rounded-lg shadow-lg w-full h-auto"
             />
@@ -277,14 +326,17 @@ export default function App() {
               </div>
             </div>
 
-            <button className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg">
+            <button 
+              className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
+              onClick={scrollToTop}
+            >
               Tìm hiểu ngay
               <ChevronRight className="ml-2 h-5 w-5" />
             </button>
           </div>
           <div className="w-1/2">
             <img
-              src={anh2}
+              src={dotor}
               alt="Doctors Team"
               className="rounded-lg shadow-lg w-full h-auto"
             />
@@ -294,7 +346,7 @@ export default function App() {
         <div className="flex justify-between items-center my-16">
           <div className="w-1/2">
             <img
-              src={anh3}
+              src={AI}
               alt="Technology"
               className="rounded-lg shadow-lg w-full h-auto"
             />
@@ -311,7 +363,10 @@ export default function App() {
               tập theo cách hiệu quả nhất, giúp tối ưu hóa khả năng tiếp thu và
               phát triển.
             </p>
-            <button className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg">
+            <button 
+              className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
+              onClick={scrollToTop}
+            >
               Tìm hiểu ngay
               <ChevronRight className="ml-2 h-5 w-5" />
             </button>
@@ -332,18 +387,21 @@ export default function App() {
                 "Nhờ hệ thống VRA mà tình trạng của con tôi ngày càng tiến triển tốt đẹp hơn. Tôi tin rằng đội ngũ y bác sĩ đã luôn cố gắng hết mình trong việc chăm sóc và điều trị.",
               name: "Dang Quang",
               role: "Phụ huynh",
+              gender: "male"
             },
             {
               quote:
                 "Sau khi hoàn thành liệu trình điều trị, con trai tôi đã có thể giao tiếp với thê giới bên ngoài. VRA quả là một hệ thống tuyệt vời.",
               name: "Dương Nguyễn",
               role: "Phụ huynh",
+              gender: "male"
             },
             {
               quote:
                 "Trong quá trình điều trị, tôi luôn có thể theo dõi chi tiết quá trình điều trị của con nhỏ. Đội ngũ y bác sĩ cũng tư vấn rất nhiệt tình và tận tâm.",
               name: "Dung Trần",
               role: "Phụ huynh",
+              gender: "female"
             },
           ].map((item, index) => (
             <div key={index} className="flex-1 bg-white p-8 rounded-xl">
@@ -354,11 +412,13 @@ export default function App() {
                   <h4 className="font-bold text-gray-900">{item.name}</h4>
                   <p className="text-gray-500 text-sm">{item.role}</p>
                 </div>
-                <img
-                  src="/api/placeholder/50/50"
-                  alt={item.name}
-                  className="h-12 w-12 rounded-full"
-                />
+                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                  {item.gender === "male" ? (
+                    <User className="h-8 w-8 text-blue-600" />
+                  ) : (
+                    <User2 className="h-8 w-8 text-pink-600" />
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -372,130 +432,193 @@ export default function App() {
       </div>
 
       {/* Footer */}
-      <footer className="w-full bg-white pt-16 pb-8 px-20">
-        <div className="flex mb-12">
-          <div className="w-1/4 pr-8">
-            <img
-              src="/api/placeholder/180/60"
-              alt="VRA Logo"
-              className="mb-4"
-            />
-            <p className="text-gray-700 mb-4">
-              VRA là một hệ thống hỗ trợ can thiệp sớm cho trẻ tự kỷ thông qua
-              trải nghiệm thực tế ảo. Web VRA cho phụ huynh/giáo viên quản lý
-              quá trình học của trẻ
-            </p>
-            <div className="flex space-x-2">
-              <a
-                href="#"
-                className="h-8 w-8 flex items-center justify-center bg-gray-200 rounded-full"
-              >
-                <img src="/api/placeholder/20/20" alt="Facebook" />
-              </a>
-              <a
-                href="#"
-                className="h-8 w-8 flex items-center justify-center bg-gray-200 rounded-full"
-              >
-                <img src="/api/placeholder/20/20" alt="Twitter" />
-              </a>
-              <a
-                href="#"
-                className="h-8 w-8 flex items-center justify-center bg-gray-200 rounded-full"
-              >
-                <img src="/api/placeholder/20/20" alt="Instagram" />
-              </a>
-              <a
-                href="#"
-                className="h-8 w-8 flex items-center justify-center bg-gray-200 rounded-full"
-              >
-                <img src="/api/placeholder/20/20" alt="LinkedIn" />
-              </a>
+      <footer className="w-full bg-white pt-16">
+        <div className="px-20 mb-12">
+          <div className="flex">
+            <div className="w-1/4 pr-8">
+              <img
+                src= {Logo1}
+                alt="VRA Logo"
+                className="mb-4"
+              />
+              <p className="text-gray-700 mb-4">
+                VRA là một hệ thống hỗ trợ can thiệp sớm cho trẻ tự kỷ thông qua
+                trải nghiệm thực tế ảo. Web VRA cho phụ huynh/giáo viên quản lý
+                quá trình học của trẻ
+              </p>
+              
+            </div>
+
+            <div className="w-1/4 px-4">
+              <h3 className="text-blue-600 font-bold mb-6">
+                Chăm sóc khách hàng
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Hướng dẫn thanh toán
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Điều kiện giao dịch chung
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Quy trình sử dụng dịch vụ
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Chính sách bảo hành
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Chính sách hoàn trả hàng
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Chính sách bảo mật
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div className="w-1/4 px-4">
+              <h3 className="text-blue-600 font-bold mb-6">Tính năng</h3>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Xem thông tin trẻ
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Quản lý danh sách
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Cấu hình bài học
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div className="w-1/4 px-4">
+              <h3 className="text-blue-600 font-bold mb-6">Về chúng tôi</h3>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Giới thiệu
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Điều khoản sử dụng
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-800">
+                    Trợ giúp
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
+        </div>
+      </footer>
 
-          <div className="w-1/4 px-4">
-            <h3 className="text-blue-600 font-bold mb-6">
-              Chăm sóc khách hàng
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="text-gray-800">
-                  Hướng dẫn thanh toán
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Điều kiện giao dịch chung
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Quy trình sử dụng dịch vụ
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Chính sách bảo hành
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Chính sách hoàn trả hàng
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Chính sách bảo mật
-                </a>
-              </li>
-            </ul>
-          </div>
+      {/* Register Form Modal */}
+      {showRegisterForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-3xl w-[500px] relative border-4 border-blue-600 shadow-2xl">
+            <button 
+              onClick={() => setShowRegisterForm(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            
+            <h2 className="text-gray-900 text-2xl font-bold mb-6 text-center">
+              Đăng ký tài khoản
+            </h2>
 
-          <div className="w-1/4 px-4">
-            <h3 className="text-blue-600 font-bold mb-6">Tính năng</h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="text-gray-800">
-                  Xem thông tin trẻ
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Quản lý danh sách
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Cấu hình bài học
-                </a>
-              </li>
-            </ul>
-          </div>
+            <div className="space-y-4">
+              <div className="flex items-center border border-gray-300 rounded px-3 py-2">
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Họ và tên*"
+                  value={registerData.fullName}
+                  onChange={handleRegisterChange}
+                  className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
+                />
+              </div>
 
-          <div className="w-1/4 px-4">
-            <h3 className="text-blue-600 font-bold mb-6">Về chúng tôi</h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="text-gray-800">
-                  Giới thiệu
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Điều khoản sử dụng
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-800">
-                  Trợ giúp
-                </a>
-              </li>
-            </ul>
+              <div className="flex items-center border border-gray-300 rounded px-3 py-2">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email*"
+                  value={registerData.email}
+                  onChange={handleRegisterChange}
+                  className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
+                />
+              </div>
+
+              <div className="flex items-center border border-gray-300 rounded px-3 py-2">
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Số điện thoại*"
+                  value={registerData.phone}
+                  onChange={handleRegisterChange}
+                  className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
+                />
+              </div>
+
+              <div className="flex items-center border border-gray-300 rounded px-3 py-2">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Mật khẩu*"
+                  value={registerData.password}
+                  onChange={handleRegisterChange}
+                  className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
+                />
+              </div>
+
+              <div className="flex items-center border border-gray-300 rounded px-3 py-2">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Xác nhận mật khẩu*"
+                  value={registerData.confirmPassword}
+                  onChange={handleRegisterChange}
+                  className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
+                />
+              </div>
+
+              <button
+                className="bg-blue-600 text-white font-bold text-sm w-full py-2 rounded hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
+                onClick={() => {
+                  // Xử lý đăng ký ở đây
+                  alert("Đăng ký thành công!");
+                  setShowRegisterForm(false);
+                }}
+              >
+                Đăng ký
+              </button>
+            </div>
           </div>
         </div>
+      )}
 
-        <div className="w-full h-12 bg-gray-900 mt-8"></div>
-      </footer>
+      <div className="w-full h-12 bg-gray-900"></div>
     </div>
   );
 }

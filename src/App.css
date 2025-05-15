@@ -81,6 +81,15 @@ body {
 .aos-animate.animate-on-scroll-fade-left {
   opacity: 1;
   transform: translateY(0) translateX(0);
+  visibility: visible;
+}
+
+/* Force visibility for footer elements regardless of scroll position */
+.footer [data-aos],
+.footer [data-aos].aos-animate {
+  opacity: 1 !important;
+  transform: translateY(0) translateX(0) !important;
+  visibility: visible !important;
 }
 
 /* Staggered animations for lists */
@@ -173,8 +182,8 @@ body {
 .hero-section {
   background: linear-gradient(135deg, var(--background-blue), var(--primary-color));
   position: relative;
-  padding-top: calc(var(--header-height) - 1.5rem); /* Further reduced padding-top */
-  padding-bottom: calc(var(--section-spacing-md) + 2rem); /* Reduced padding */
+  padding-top: calc(var(--header-height)); /* Further reduced padding-top */
+  padding-bottom: calc(var(--section-spacing-md) + var(--header-height)); /* Reduced padding */
   min-height: 75vh; /* Reduced for better balance */
   display: flex;
   align-items: center;
@@ -315,9 +324,7 @@ body {
 }
 
 /* Update the top margin for main content to account for fixed header */
-.main-content {
-  margin-top: var(--header-height);
-}
+
 
 /* Logo sizing - Increased */
 .logo {
@@ -584,10 +591,19 @@ body {
 }
 
 /* Footer Improvements */
+.footer-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 .footer {
   background: linear-gradient(to bottom, var(--background-light), white);
   position: relative;
   overflow: hidden;
+  visibility: visible !important; /* Always ensure the footer is visible */
+  opacity: 1 !important; /* Always ensure the footer is visible */
+  display: block !important;
 }
 
 .footer::before {

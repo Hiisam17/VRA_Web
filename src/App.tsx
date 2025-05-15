@@ -1,6 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { Eye, EyeOff, CheckCircle, ChevronRight, Star, User, User2, X } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  CheckCircle,
+  ChevronRight,
+  Star,
+  User,
+  User2,
+  X,
+  Menu,
+  Mail,
+  Phone,
+  MapPin,
+  ArrowRight,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Heart,
+} from "lucide-react";
+import "./App.css";
 import logo from "./img/logo.png";
 import Logo1 from "./img/Logo1.png";
 import anh1 from "./img/anh1.png";
@@ -19,12 +39,14 @@ export default function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [registerData, setRegisterData] = useState({
     fullName: "",
     email: "",
     phone: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const testimonials = [
@@ -33,85 +55,85 @@ export default function App() {
         "Nhờ hệ thống VRA mà tình trạng của con tôi ngày càng tiến triển tốt đẹp hơn. Tôi tin rằng đội ngũ y bác sĩ đã luôn cố gắng hết mình trong việc chăm sóc và điều trị.",
       name: "Dang Quang",
       role: "Phụ huynh",
-      gender: "male"
+      gender: "male",
     },
     {
       quote:
         "Sau khi hoàn thành liệu trình điều trị, con trai tôi đã có thể giao tiếp với thê giới bên ngoài. VRA quả là một hệ thống tuyệt vời.",
       name: "Dương Nguyễn",
       role: "Phụ huynh",
-      gender: "male"
+      gender: "male",
     },
     {
       quote:
         "Trong quá trình điều trị, tôi luôn có thể theo dõi chi tiết quá trình điều trị của con nhỏ. Đội ngũ y bác sĩ cũng tư vấn rất nhiệt tình và tận tâm.",
       name: "Dung Trần",
       role: "Phụ huynh",
-      gender: "female"
+      gender: "female",
     },
     {
       quote:
         "Con tôi rất thích các bài học tương tác trên VRA. Các hoạt động vừa học vừa chơi giúp bé hứng thú và tiếp thu tốt hơn.",
       name: "Minh Anh",
       role: "Phụ huynh",
-      gender: "female"
+      gender: "female",
     },
     {
       quote:
         "Tôi đánh giá cao tính năng theo dõi tiến độ học tập. Giúp tôi nắm rõ được sự phát triển của con mỗi ngày.",
       name: "Hoàng Nam",
       role: "Phụ huynh",
-      gender: "male"
+      gender: "male",
     },
     {
       quote:
         "Đội ngũ hỗ trợ rất nhiệt tình, luôn sẵn sàng giải đáp thắc mắc và tư vấn kịp thời cho phụ huynh chúng tôi.",
       name: "Thảo Nguyên",
       role: "Phụ huynh",
-      gender: "female"
+      gender: "female",
     },
     {
       quote:
         "Các bài học được thiết kế rất khoa học, phù hợp với từng độ tuổi và khả năng của trẻ. Con tôi tiến bộ rõ rệt sau 3 tháng.",
       name: "Văn Hùng",
       role: "Phụ huynh",
-      gender: "male"
+      gender: "male",
     },
     {
       quote:
         "Giao diện thân thiện, dễ sử dụng. Tôi có thể dễ dàng theo dõi và hỗ trợ con học tập tại nhà.",
       name: "Hương Giang",
       role: "Phụ huynh",
-      gender: "female"
+      gender: "female",
     },
     {
       quote:
         "Các hoạt động tương tác giúp con tôi tự tin hơn trong giao tiếp và hòa nhập tốt hơn với môi trường xung quanh.",
       name: "Quốc Bảo",
       role: "Phụ huynh",
-      gender: "male"
+      gender: "male",
     },
     {
       quote:
         "Tôi rất ấn tượng với cách VRA áp dụng công nghệ AI để cá nhân hóa bài học cho từng trẻ. Con tôi học tập hiệu quả hơn nhiều.",
       name: "Mai Linh",
       role: "Phụ huynh",
-      gender: "female"
+      gender: "female",
     },
     {
       quote:
         "Các báo cáo chi tiết về tiến độ học tập giúp tôi và giáo viên có thể điều chỉnh phương pháp dạy phù hợp với con.",
       name: "Đức Minh",
       role: "Phụ huynh",
-      gender: "male"
+      gender: "male",
     },
     {
       quote:
         "Con tôi rất thích các bài học qua hình ảnh và video. Cách tiếp cận này giúp bé dễ dàng tiếp thu và ghi nhớ kiến thức.",
       name: "Thanh Hà",
       role: "Phụ huynh",
-      gender: "female"
-    }
+      gender: "female",
+    },
   ];
 
   useEffect(() => {
@@ -122,31 +144,123 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setIsHeaderScrolled(true);
+      } else {
+        setIsHeaderScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Scroll animation with Intersection Observer
+  useEffect(() => {
+    const animatedElements = document.querySelectorAll("[data-aos]");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("aos-animate");
+            // Optional: unobserve after animation is applied
+            // observer.unobserve(entry.target);
+          } else {
+            // Optional: remove class when out of view for re-animation when scrolling back up
+            entry.target.classList.remove("aos-animate");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    animatedElements.forEach((element) => {
+      observer.observe(element);
+
+      // Set initial animation type from data-aos attribute
+      const animationType = element.getAttribute("data-aos");
+      if (animationType === "fade-up") {
+        element.classList.add("animate-on-scroll-fade-up");
+      } else if (animationType === "fade-right") {
+        element.classList.add("animate-on-scroll-fade-right");
+      } else if (animationType === "fade-left") {
+        element.classList.add("animate-on-scroll-fade-left");
+      }
+    });
+
+    return () => {
+      animatedElements.forEach((element) => {
+        observer.unobserve(element);
+      });
+    };
+  }, []);
+
+  // Add smooth scrolling to anchor links
+  useEffect(() => {
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a[href^="#"]');
+
+      if (anchor) {
+        e.preventDefault();
+        const targetId = anchor.getAttribute("href");
+
+        if (targetId) {
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            const headerHeight =
+              document.querySelector(".header")?.clientHeight || 80;
+            const targetTop =
+              targetElement.getBoundingClientRect().top + window.scrollY;
+
+            window.scrollTo({
+              top: targetTop - headerHeight - 20,
+              behavior: "smooth",
+            });
+          }
+        }
+      }
+    };
+
+    document.addEventListener("click", handleAnchorClick);
+
+    return () => {
+      document.removeEventListener("click", handleAnchorClick);
+    };
+  }, []);
+
   const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRegisterData(prev => ({
+    setRegisterData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
   const scrollToLoginForm = () => {
-    const loginForm = document.getElementById('login-form');
+    const loginForm = document.getElementById("login-form");
     if (loginForm) {
-      loginForm.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+      const headerHeight =
+        document.querySelector(".header")?.clientHeight || 80;
 
-  const style = {
-    backgroundColor: "#19395E",
-    color: "#fff",
+      window.scrollTo({
+        top: headerHeight - 50,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
@@ -154,566 +268,941 @@ export default function App() {
       <Routes>
         <Route path="/lesson-list" element={<VRALessonList />} />
         <Route path="/report-detail" element={<VRADetailReport />} />
-        <Route path="/" element={
-          <div className="flex flex-col items-start bg-white relative">
-            {/* Header Navigation */}
-            <div className="flex items-center w-full px-20 py-4 justify-between">
-              <div className="flex items-center space-x-10">
-                <img
-                  src={Logo1}
-                  alt="VRA Logo"
-                  className="h-16 object-contain"
-                />
-                <div className="flex space-x-8">
-                  <Link to="/" className="text-black font-bold text-2xl px-4 py-2 rounded hover:bg-gray-100 transition-all duration-200">Trang chủ</Link>
-                  <Link to="/lesson-list" className="text-black font-bold text-2xl px-4 py-2 rounded hover:bg-gray-100 transition-all duration-200">
-                    Danh sách học sinh
-                  </Link>
-                  <button className="text-black font-bold text-2xl px-4 py-2 rounded hover:bg-gray-100 transition-all duration-200">
-                    Quản lý cấu hình cá nhân hóa
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center space-x-6">
-                <button 
-                  className="text-blue-600 text-2xl font-bold px-4 py-2 rounded hover:bg-blue-50 transition-all duration-200"
-                  onClick={scrollToLoginForm}
-                >
-                  Đăng nhập
-                </button>
-                <button 
-                  className="bg-red-500 text-white font-bold text-2xl px-6 py-2 rounded hover:bg-red-600 transition-all duration-200"
-                  onClick={() => setShowRegisterForm(true)}
-                >
-                  Đăng ký
-                </button>
-              </div>
-            </div>
-
-            {/* Hero Section */}
-            <div className="w-full bg-blue-900 py-8 px-20" style={style}>
-              <div className="flex items-start justify-between">
-                <div className="w-1/2 pt-12">
-                  <div className="mb-16">
-                    <h1 className="text-white font-bold text-4xl mb-2">
-                      Nền tảng học tập
-                    </h1>
-                    <h1 className="text-white font-bold text-4xl mb-2">
-                      cho em trẻ mắc chứng
-                    </h1>
-                    <h1 className="text-teal-300 font-bold text-4xl">tự kỷ</h1>
-                  </div>
-
-                  <div className="flex flex-col space-y-3 mb-8">
-                    <div className="inline-flex items-center bg-blue-950 px-6 py-4 rounded">
-                      <CheckCircle className="text-white mr-2 h-4 w-4 flex-shrink-0" />
-                      <span className="text-white text-base">Tự tin giao tiếp</span>
-                    </div>
-                    <div className="inline-flex items-center bg-blue-950 px-6 py-4 rounded">
-                      <CheckCircle className="text-white mr-2 h-4 w-4 flex-shrink-0" />
-                      <span className="text-white text-base">Khơi dậy đam mê khám phá</span>
-                    </div>
-                    <div className="inline-flex items-center bg-blue-950 px-6 py-4 rounded">
-                      <CheckCircle className="text-white mr-2 h-4 w-4 flex-shrink-0" />
-                      <span className="text-white text-base">Quản lý dễ dàng, chăm sóc tận tâm</span>
-                    </div>
-                    <div className="inline-flex items-center bg-blue-950 px-6 py-4 rounded">
-                      <CheckCircle className="text-white mr-2 h-4 w-4 flex-shrink-0" />
-                      <span className="text-white text-base">Ứng dụng công nghệ, nâng cao chất lượng chăm sóc</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Login Card */}
-                <div id="login-form" className="bg-blue-600 p-8 rounded-3xl shadow-lg">
-                  <div className="bg-white p-8 rounded-3xl">
-                    <h2 className="text-gray-900 text-lg font-bold mb-6">
-                      Học giao tiếp và khám phá thế giới với VRA
-                    </h2>
-
-                    <div className="space-y-4 mb-6">
-                      <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                        <input
-                          type="text"
-                          placeholder="Tên tài khoản*"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                          <input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Mật khẩu*"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
-                          />
-                          <button 
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="text-gray-500 hover:text-gray-700"
-                          >
-                            {showPassword ? (
-                              <Eye className="h-5 w-5" />
-                            ) : (
-                              <EyeOff className="h-5 w-5" />
-                            )}
-                          </button>
-                        </div>
-                        <div className="text-right">
-                          <a href="#" className="text-blue-600 text-xs">
-                            Quên mật khẩu?
-                          </a>
-                        </div>
-                      </div>
-
-                      <button
-                        className="bg-blue-600 text-white font-bold text-sm w-full py-2 rounded hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
-                        onClick={() => alert("Đăng nhập thành công!")}
-                      >
-                        Đăng nhập
-                      </button>
-                    </div>
-
-                    <div className="mb-6">
-                      <div className="flex items-center mb-3">
-                        <span className="text-gray-500 text-xs mr-2">
-                          Hoặc tiếp tục với
-                        </span>
-                        <div className="h-px bg-gray-300 flex-1"></div>
-                      </div>
-
-                      <button className="bg-gray-100 w-full py-2 rounded flex items-center justify-center hover:bg-gray-200 transform hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md">
-                        <img
-                          src={googleLogo}
-                          alt="Google"
-                          className="h-5 w-5 mr-2"
-                        />
-                        <span className="text-gray-700">Đăng nhập với Google</span>
-                      </button>
-                    </div>
-
-                    <div className="text-center mb-6">
-                      <span className="text-gray-900 text-xs">
-                        Nếu bạn chưa có tài khoản, vui lòng{" "}
-                        <a 
-                          href="#" 
-                          className="text-blue-600"
-                          onClick={() => setShowRegisterForm(true)}
-                        >
-                          Đăng ký
-                        </a>
-                      </span>
-                    </div>
-
-                    <div className="text-center">
-                      <div className="h-px bg-gray-300 w-full mb-3"></div>
-                      <p className="text-gray-700 text-xs">
-                        Trang này được bảo vệ bởi reCAPTCHA và áp dụng Điều khoản sử
-                        dụng.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Why Choose VRA Section */}
-            <div className="w-full py-16 px-20 text-center">
-              <h2 className="text-blue-900 font-bold text-4xl mb-12">
-                Lý do nên lựa chọn hệ thống VRA
-              </h2>
-
-              <div className="flex gap-4">
-                {[
-                  {
-                    image: anh1,
-                    title: "Khám phá thế giới 3D sống động",
-                    desc: "VRA giúp trẻ tương tác với môi trường ảo, học qua các vật thể và không gian thú vị. Đồng thời, các bài học được thiết kế dưới dạng trò chơi, giúp trẻ vừa học vừa giải trí.",
-                  },
-                  {
-                    image: anh2,
-                    title: "Phát triển kỹ năng giao tiếp và xã hội",
-                    desc: "VRA hỗ trợ trẻ tự tin giao tiếp thông qua bài học kỹ năng xã hội. Cùng vời hệ thống AI gợi ý thông minh giúp trẻ xử lí tình huống khi gặp khó khăn mà không bị áp lực",
-                  },
-                  {
-                    image: anh3,
-                    title: "Đồng hành cùng gia đình và giáo viên",
-                    desc: "Giáo viên và phụ huynh có thể quản lý và điều chỉnh lộ trình học cho trẻ qua giao diện web.",
-                  },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex-1 relative rounded-xl overflow-hidden bg-blue-50"
-                  >
-                    <div className="p-6">
-                      <img
-                        src={item.image}
-                        className="w-full h-48 object-cover rounded-lg mb-4"
-                        alt={item.title}
-                      />
-                      <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                      <p className="text-gray-800 text-sm">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Features Section */}
-            <div className="w-full bg-blue-900 py-16 px-20" style={style}>
-              <h2 className="text-white font-bold text-4xl mb-6">
-                Cùng tìm hiểu khả năng của
-                <span className="text-teal-300 block">hệ thống VRA</span>
-                dành riêng cho phụ huynh?
-              </h2>
-
-              <div className="flex justify-between items-center my-16">
-                <div className="w-1/2 pr-16">
-                  <h3 className="text-white text-3xl font-bold mb-6">
-                    Dễ dàng theo dõi và quản lí tiến độ học tập của trẻ nhỏ
-                  </h3>
-                  <p className="text-white mb-4">
-                    Hệ thống cập nhật tiến độ học tập của trẻ nhỏ theo thời gian thực.
-                  </p>
-                  <p className="text-white mb-10">
-                    Mỗi khi kết thúc buổi học hệ thống sẽ tự động ghi lại video quá
-                    trình học tập của trẻ.
-                  </p>
-                  <button 
-                    className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
-                    onClick={scrollToTop}
-                  >
-                    Tìm hiểu ngay
-                    <ChevronRight className="ml-2 h-5 w-5" />
-                  </button>
-                </div>
-                <div className="w-1/2">
-                  <img
-                    src={Manage}
-                    alt="Dashboard"
-                    className="rounded-lg shadow-lg w-full h-auto"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center my-16">
-                <div className="w-1/2 pr-16">
-                  <h3 className="text-white text-3xl font-bold mb-6">
-                    Đội ngũ y bác sĩ chất lượng cao
-                  </h3>
-                  <p className="text-white mb-8">
-                    Đội ngũ y bác sĩ có thâm niên kinh nghiệm trong việc thăm khám và
-                    điều trị cho trẻ tự kỷ.
-                  </p>
-
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-center">
-                      <CheckCircle className="text-white mr-2 h-4 w-4" />
-                      <span className="text-white">
-                        Cách truyền đạt kiến thức gần gũi và dễ hiểu.
-                      </span>
-                    </div>
-                    <div className="flex items-center">
-                      <CheckCircle className="text-white mr-2 h-4 w-4" />
-                      <span className="text-white">
-                        Tận tâm chăm sóc và hỗ trợ trẻ trong quá trình điều trị.
-                      </span>
-                    </div>
-                    <div className="flex items-center">
-                      <CheckCircle className="text-white mr-2 h-4 w-4" />
-                      <span className="text-white">
-                        Sẵn sàng giải đáp và tư vấn cho phụ huynh.
-                      </span>
-                    </div>
-                  </div>
-
-                  <button 
-                    className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
-                    onClick={scrollToTop}
-                  >
-                    Tìm hiểu ngay
-                    <ChevronRight className="ml-2 h-5 w-5" />
-                  </button>
-                </div>
-                <div className="w-1/2">
-                  <img
-                    src={dotor}
-                    alt="Doctors Team"
-                    className="rounded-lg shadow-lg w-full h-auto"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center my-16">
-                <div className="w-1/2">
-                  <img
-                    src={AI}
-                    alt="Technology"
-                    className="rounded-lg shadow-lg w-full h-auto"
-                  />
-                </div>
-                <div className="w-1/2 pl-16">
-                  <h3 className="text-white text-3xl font-bold mb-6">
-                    Liên tục cập nhật và ứng dụng công nghệ cao
-                  </h3>
-                  <p className="text-white mb-10">
-                    Sản phẩm sử dụng AI để cá nhân hóa nội dung và lộ trình học tập
-                    theo nhu cầu của từng người dùng. Hệ thống có khả năng phân tích
-                    hành vi, ghi nhận tiến độ học và tự động gợi ý những bài học hoặc
-                    bài tập phù hợp. Điều này đảm bảo rằng mỗi học sinh đều được học
-                    tập theo cách hiệu quả nhất, giúp tối ưu hóa khả năng tiếp thu và
-                    phát triển.
-                  </p>
-                  <button 
-                    className="bg-blue-600 text-white px-6 py-3 rounded flex items-center hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
-                    onClick={scrollToTop}
-                  >
-                    Tìm hiểu ngay
-                    <ChevronRight className="ml-2 h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonials */}
-            <div className="w-full bg-blue-50 py-16 px-20">
-              <h2 className="text-blue-900 font-bold text-4xl text-center mb-12">
-                Phụ huynh nói gì về chúng tôi
-              </h2>
-
-              <div className="flex gap-8 relative">
-                {testimonials.map((item, index) => {
-                  const displayIndex = (index + currentTestimonial) % testimonials.length;
-                  return (
-                    <div 
-                      key={index} 
-                      className={`flex-1 bg-white p-8 rounded-xl transition-all duration-500 ${
-                        index < 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95 absolute'
-                      }`}
-                    >
-                      <Star className="text-yellow-500 h-5 w-5 mb-3" />
-                      <p className="text-gray-800 mb-8">{testimonials[displayIndex].quote}</p>
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h4 className="font-bold text-gray-900">{testimonials[displayIndex].name}</h4>
-                          <p className="text-gray-500 text-sm">{testimonials[displayIndex].role}</p>
-                        </div>
-                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                          {testimonials[displayIndex].gender === "male" ? (
-                            <User className="h-8 w-8 text-blue-600" />
-                          ) : (
-                            <User2 className="h-8 w-8 text-pink-600" />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="flex justify-center mt-8">
-                <div className="w-1/2 h-2 bg-gray-200 rounded-full">
-                  <div 
-                    className="h-full bg-blue-600 rounded-full transition-all duration-500"
-                    style={{ width: `${((currentTestimonial + 3) / testimonials.length) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <footer className="w-full bg-white pt-16">
-              <div className="px-20 mb-12">
-                <div className="flex">
-                  <div className="w-1/4 pr-8">
+        <Route
+          path="/"
+          element={
+            <div className="flex flex-col items-start bg-white relative">
+              {/* Header Navigation */}
+              <div
+                className={`fixed top-0 left-0 right-0 z-50 header ${
+                  isHeaderScrolled ? "header-scrolled" : ""
+                }`}
+              >
+                <div className="flex items-center w-full px-6 lg:px-16 justify-between animate-fadeIn">
+                  <div className="flex items-center space-x-8">
                     <img
-                      src= {Logo1}
+                      src={Logo1}
                       alt="VRA Logo"
-                      className="mb-4"
+                      className="logo transition-transform duration-300 hover:scale-105 cursor-pointer"
                     />
-                    <p className="text-gray-700 mb-4">
-                      VRA là một hệ thống hỗ trợ can thiệp sớm cho trẻ tự kỷ thông qua
-                      trải nghiệm thực tế ảo. Web VRA cho phụ huynh/giáo viên quản lý
-                      quá trình học của trẻ
-                    </p>
-                    
+                    <div className="hidden md:flex space-x-6">
+                      <Link
+                        to="/"
+                        className="nav-link text-gray-800 font-semibold rounded hover:text-primary-light transition-all duration-150"
+                      >
+                        Trang chủ
+                      </Link>
+                      <Link
+                        to="/lesson-list"
+                        className="nav-link text-gray-800 font-semibold rounded hover:text-primary-light transition-all duration-150"
+                      >
+                        Danh sách học sinh
+                      </Link>
+                      <button className="nav-link text-gray-800 font-semibold rounded hover:text-primary-light transition-all duration-150">
+                        Quản lý cấu hình
+                      </button>
+                    </div>
                   </div>
-
-                  <div className="w-1/4 px-4">
-                    <h3 className="text-blue-600 font-bold mb-6">
-                      Chăm sóc khách hàng
-                    </h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Hướng dẫn thanh toán
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Điều kiện giao dịch chung
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Quy trình sử dụng dịch vụ
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Chính sách bảo hành
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Chính sách hoàn trả hàng
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Chính sách bảo mật
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="w-1/4 px-4">
-                    <h3 className="text-blue-600 font-bold mb-6">Tính năng</h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Xem thông tin trẻ
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Quản lý danh sách
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Cấu hình bài học
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="w-1/4 px-4">
-                    <h3 className="text-blue-600 font-bold mb-6">Về chúng tôi</h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Giới thiệu
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Điều khoản sử dụng
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-gray-800">
-                          Trợ giúp
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </footer>
-
-            {/* Register Form Modal */}
-            {showRegisterForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white p-8 rounded-3xl w-[500px] relative border-4 border-blue-600 shadow-2xl">
-                  <button 
-                    onClick={() => setShowRegisterForm(false)}
-                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-                  >
-                    <X className="h-6 w-6" />
-                  </button>
-                  
-                  <h2 className="text-gray-900 text-2xl font-bold mb-6 text-center">
-                    Đăng ký tài khoản
-                  </h2>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                      <input
-                        type="text"
-                        name="fullName"
-                        placeholder="Họ và tên*"
-                        value={registerData.fullName}
-                        onChange={handleRegisterChange}
-                        className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
-                      />
-                    </div>
-
-                    <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Email*"
-                        value={registerData.email}
-                        onChange={handleRegisterChange}
-                        className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
-                      />
-                    </div>
-
-                    <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                      <input
-                        type="tel"
-                        name="phone"
-                        placeholder="Số điện thoại*"
-                        value={registerData.phone}
-                        onChange={handleRegisterChange}
-                        className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
-                      />
-                    </div>
-
-                    <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                      <input
-                        type="password"
-                        name="password"
-                        placeholder="Mật khẩu*"
-                        value={registerData.password}
-                        onChange={handleRegisterChange}
-                        className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
-                      />
-                    </div>
-
-                    <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Xác nhận mật khẩu*"
-                        value={registerData.confirmPassword}
-                        onChange={handleRegisterChange}
-                        className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none text-sm"
-                      />
-                    </div>
-
+                  <div className="hidden md:flex items-center space-x-4">
                     <button
-                      className="bg-blue-600 text-white font-bold text-sm w-full py-2 rounded hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
-                      onClick={() => {
-                        // Xử lý đăng ký ở đây
-                        alert("Đăng ký thành công!");
-                        setShowRegisterForm(false);
-                      }}
+                      className="btn btn-outline text-primary-color font-semibold px-4 py-1.5 rounded-full transition-all duration-300"
+                      onClick={scrollToLoginForm}
+                    >
+                      Đăng nhập
+                    </button>
+                    <button
+                      className="btn btn-primary text-white font-semibold px-5 py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                      onClick={() => setShowRegisterForm(true)}
                     >
                       Đăng ký
                     </button>
                   </div>
+                  <button
+                    className="md:hidden text-gray-800 p-2"
+                    onClick={() => setShowMobileMenu(true)}
+                  >
+                    <Menu className="h-6 w-6" />
+                  </button>
                 </div>
               </div>
-            )}
 
-            <div className="w-full h-12 bg-gray-900"></div>
-          </div>
-        } />
+              {/* Mobile Menu */}
+              {showMobileMenu && (
+                <div
+                  className="fixed inset-0 bg-black bg-opacity-50 z-50"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <div
+                    className="mobile-menu absolute top-0 right-0 h-full w-4/5 max-w-xs bg-white shadow-xl transform transition-transform duration-300"
+                    style={{ transform: "translateX(0)" }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex justify-between items-center p-5 border-b">
+                      <img src={Logo1} alt="VRA Logo" className="h-8" />
+                      <button onClick={() => setShowMobileMenu(false)}>
+                        <X className="h-6 w-6 text-gray-800" />
+                      </button>
+                    </div>
+                    <div className="flex flex-col p-5 space-y-4">
+                      <Link
+                        to="/"
+                        className="text-gray-800 font-semibold text-lg py-2 border-b border-gray-100"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        Trang chủ
+                      </Link>
+                      <Link
+                        to="/lesson-list"
+                        className="text-gray-800 font-semibold text-lg py-2 border-b border-gray-100"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        Danh sách học sinh
+                      </Link>
+                      <button
+                        className="text-gray-800 font-semibold text-lg py-2 border-b border-gray-100 text-left"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        Quản lý cấu hình
+                      </button>
+                      <div className="pt-4 flex flex-col space-y-3">
+                        <button
+                          className="bg-white text-primary-color border-2 border-primary-color font-bold w-full py-2.5 rounded-full"
+                          onClick={() => {
+                            scrollToLoginForm();
+                            setShowMobileMenu(false);
+                          }}
+                        >
+                          Đăng nhập
+                        </button>
+                        <button
+                          className="bg-primary-color text-white font-bold w-full py-2.5 rounded-full"
+                          onClick={() => {
+                            setShowRegisterForm(true);
+                            setShowMobileMenu(false);
+                          }}
+                        >
+                          Đăng ký
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Main Content */}
+              <div className="w-full main-content">
+                {/* Hero Section */}
+                <section className="hero-section w-full flex items-center justify-center overflow-hidden">
+                  <div className="max-w-7xl mx-auto px-6 md:px-8 w-full py-8 md:py-12">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-12">
+                      <div className="w-full md:w-1/2 pt-4 animate-slideUp">
+                        <div className="mb-8 md:mb-12">
+                          <h1 className="text-white font-bold text-4xl md:text-5xl lg:text-6xl mb-3 hero-text leading-tight">
+                            Nền tảng học tập
+                            <span className="block mt-2">
+                              cho em trẻ mắc chứng
+                            </span>
+                            <span className="text-accent-color">tự kỷ</span>
+                          </h1>
+                        </div>
+
+                        <div
+                          className="flex flex-col space-y-3 mb-10"
+                          data-aos="stagger"
+                        >
+                          {[
+                            "Tự tin giao tiếp",
+                            "Khơi dậy đam mê khám phá",
+                            "Quản lý dễ dàng, chăm sóc tận tâm",
+                            "Ứng dụng công nghệ, nâng cao chất lượng",
+                          ].map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="inline-flex items-center bg-blue-950 bg-opacity-70 px-5 py-3 rounded-lg transform transition-all duration-500 hover:scale-105 hover:bg-opacity-90"
+                            >
+                              <CheckCircle className="text-white mr-3 h-5 w-5 flex-shrink-0" />
+                              <span className="text-white text-base">
+                                {item}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex flex-wrap gap-4">
+                          <button
+                            onClick={scrollToLoginForm}
+                            className="btn btn-primary text-white font-bold px-6 py-3 rounded-full flex items-center shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+                          >
+                            Bắt đầu ngay
+                            <ChevronRight className="ml-1 h-5 w-5" />
+                          </button>
+                          <a
+                            href="#features"
+                            className="btn btn-outline text-white border-2 border-white font-bold px-6 py-3 rounded-full transition-all duration-500"
+                          >
+                            Tìm hiểu thêm
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Login Card */}
+                      <div
+                        id="login-form"
+                        className="w-full md:w-5/12 mt-8 md:mt-0 hero-login-container animate-slideInRight"
+                      >
+                        <div className="bg-white/10 backdrop-blur-lg p-2 md:p-3 rounded-3xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
+                          <div className="bg-white p-6 rounded-2xl">
+                            <h2 className="text-gray-900 text-xl font-bold mb-5">
+                              Học giao tiếp và khám phá thế giới với VRA
+                            </h2>
+
+                            <div className="space-y-4 mb-5">
+                              <div className="form-input flex items-center border-2 border-gray-200 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                                <User className="h-5 w-5 text-gray-400 mr-3" />
+                                <input
+                                  type="text"
+                                  placeholder="Tên tài khoản*"
+                                  value={username}
+                                  onChange={(e) => setUsername(e.target.value)}
+                                  className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <div className="form-input flex items-center border-2 border-gray-200 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                                  <input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Mật khẩu*"
+                                    value={password}
+                                    onChange={(e) =>
+                                      setPassword(e.target.value)
+                                    }
+                                    className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                                  />
+                                  <button
+                                    onClick={() =>
+                                      setShowPassword(!showPassword)
+                                    }
+                                    className="text-gray-500 hover:text-primary-color transition-colors duration-300"
+                                  >
+                                    {showPassword ? (
+                                      <Eye className="h-5 w-5" />
+                                    ) : (
+                                      <EyeOff className="h-5 w-5" />
+                                    )}
+                                  </button>
+                                </div>
+                                <div className="text-right">
+                                  <a
+                                    href="#"
+                                    className="text-primary-color text-sm hover:underline transition-all duration-300"
+                                  >
+                                    Quên mật khẩu?
+                                  </a>
+                                </div>
+                              </div>
+
+                              <button
+                                className="btn btn-primary text-white font-bold w-full py-3 rounded-lg hover:bg-primary-light transform hover:scale-[1.02] transition-all duration-300 shadow-md hover:shadow-lg"
+                                onClick={() => alert("Đăng nhập thành công!")}
+                              >
+                                Đăng nhập
+                              </button>
+                            </div>
+
+                            <div className="mb-5">
+                              <div className="flex items-center mb-3">
+                                <span className="text-gray-500 text-sm mr-2">
+                                  Hoặc tiếp tục với
+                                </span>
+                                <div className="h-px bg-gray-300 flex-1"></div>
+                              </div>
+
+                              <button className="bg-gray-100 w-full py-3 rounded-lg flex items-center justify-center hover:bg-gray-200 transform hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-md">
+                                <img
+                                  src={googleLogo}
+                                  alt="Google"
+                                  className="h-5 w-5 mr-2"
+                                />
+                                <span className="text-gray-700">
+                                  Đăng nhập với Google
+                                </span>
+                              </button>
+                            </div>
+
+                            <div className="text-center mb-4">
+                              <span className="text-gray-900 text-sm">
+                                Nếu bạn chưa có tài khoản, vui lòng{" "}
+                                <a
+                                  href="#"
+                                  className="text-primary-color font-semibold hover:underline transition-all duration-300"
+                                  onClick={() => setShowRegisterForm(true)}
+                                >
+                                  Đăng ký
+                                </a>
+                              </span>
+                            </div>
+
+                            <div className="text-center">
+                              <div className="h-px bg-gray-300 w-full mb-3"></div>
+                              <p className="text-gray-700 text-xs">
+                                Trang này được bảo vệ bởi reCAPTCHA và áp dụng
+                                Điều khoản sử dụng.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Why Choose VRA Section */}
+                <section
+                  id="features"
+                  className="feature-section w-full py-16 lg:py-20 px-6 md:px-8 bg-gradient-to-b from-white to-blue-50"
+                >
+                  <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16" data-aos="fade-up">
+                      <span className="inline-block text-primary-color font-semibold mb-2 text-sm tracking-wider uppercase">
+                        Tại sao chọn VRA
+                      </span>
+                      <h2 className="text-primary-color font-bold text-3xl md:text-5xl mb-4 leading-tight">
+                        Lý do nên lựa chọn hệ thống VRA
+                      </h2>
+                      <p className="text-gray-700 max-w-2xl mx-auto text-lg">
+                        Chúng tôi cung cấp giải pháp toàn diện, giúp trẻ phát
+                        triển kỹ năng và tự tin trong một môi trường học tập
+                        tương tác.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      {[
+                        {
+                          image: anh1,
+                          title: "Khám phá thế giới 3D sống động",
+                          desc: "VRA giúp trẻ tương tác với môi trường ảo, học qua các vật thể và không gian thú vị. Các bài học được thiết kế dưới dạng trò chơi, giúp trẻ vừa học vừa giải trí.",
+                          delay: 0,
+                        },
+                        {
+                          image: anh2,
+                          title: "Phát triển kỹ năng giao tiếp và xã hội",
+                          desc: "VRA hỗ trợ trẻ tự tin giao tiếp thông qua bài học kỹ năng xã hội. Hệ thống AI gợi ý thông minh giúp trẻ xử lí tình huống khi gặp khó khăn mà không bị áp lực.",
+                          delay: 0.2,
+                        },
+                        {
+                          image: anh3,
+                          title: "Đồng hành cùng gia đình và giáo viên",
+                          desc: "Giáo viên và phụ huynh có thể quản lý và điều chỉnh lộ trình học cho trẻ qua giao diện web thân thiện, dễ sử dụng.",
+                          delay: 0.4,
+                        },
+                      ].map((item, index) => (
+                        <div
+                          key={index}
+                          className="feature-card bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-500 hover:scale-105"
+                          data-aos="fade-up"
+                          style={{ animationDelay: `${item.delay}s` }}
+                        >
+                          <div className="card-image-container">
+                            <img
+                              src={item.image}
+                              className="w-full h-full object-cover transform transition-all duration-500 hover:scale-110"
+                              alt={item.title}
+                            />
+                          </div>
+                          <div className="card-content">
+                            <h3 className="card-title">{item.title}</h3>
+                            <p className="card-description">{item.desc}</p>
+                            <button className="group flex items-center text-primary-color font-semibold transform transition-all duration-300 hover:translate-x-2">
+                              <span className="group-hover:underline">
+                                Tìm hiểu thêm
+                              </span>
+                              <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                {/* Features Section */}
+                <section className="section-features w-full py-16 lg:py-20 px-6 md:px-8 bg-gradient-to-b from-blue-900 to-blue-800 text-white">
+                  <div className="max-w-7xl mx-auto">
+                    <div
+                      className="feature-section-title text-center mb-16"
+                      data-aos="fade-up"
+                    >
+                      <span className="inline-block text-accent-color font-semibold mb-2 text-sm tracking-wider uppercase">
+                        Tính năng nổi bật
+                      </span>
+                      <h2 className="text-white font-bold text-3xl md:text-5xl mb-4 leading-tight">
+                        Cùng tìm hiểu khả năng của
+                        <span className="text-accent-color block mt-2">
+                          hệ thống VRA
+                        </span>
+                        dành riêng cho phụ huynh
+                      </h2>
+                    </div>
+
+                    <div className="feature-row flex flex-col-reverse md:flex-row justify-between items-center md:items-stretch gap-12 md:gap-10">
+                      <div
+                        className="w-full md:w-1/2 flex flex-col justify-center"
+                        data-aos="fade-right"
+                      >
+                        <span className="inline-block text-accent-color font-semibold mb-2 text-sm tracking-wider uppercase">
+                          Theo dõi học tập
+                        </span>
+                        <h3 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-5 leading-tight">
+                          Dễ dàng theo dõi và quản lí tiến độ học tập của trẻ
+                          nhỏ
+                        </h3>
+                        <p className="text-blue-100 mb-4 text-lg leading-relaxed">
+                          Hệ thống cập nhật tiến độ học tập của trẻ nhỏ theo
+                          thời gian thực, giúp phụ huynh và giáo viên nắm bắt
+                          được sự tiến bộ của trẻ mỗi ngày.
+                        </p>
+                        <p className="text-blue-100 mb-8 text-lg leading-relaxed">
+                          Mỗi khi kết thúc buổi học hệ thống sẽ tự động ghi lại
+                          video quá trình học tập để phụ huynh có thể xem lại và
+                          đánh giá hiệu quả.
+                        </p>
+                        <div className="flex flex-wrap gap-4 mt-auto">
+                          <button
+                            className="btn btn-primary bg-white text-primary-color px-6 py-3 rounded-full flex items-center hover:bg-blue-50 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl"
+                            onClick={scrollToTop}
+                          >
+                            Tìm hiểu ngay
+                            <ChevronRight className="ml-2 h-5 w-5" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="w-full md:w-1/2" data-aos="fade-left">
+                        <div className="rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-500 hover:scale-[1.03] hover:rotate-1 relative group">
+                          <div className="absolute inset-0 bg-gradient-to-tr from-primary-color/30 to-transparent mix-blend-overlay opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
+                          <img
+                            src={Manage}
+                            alt="Dashboard"
+                            className="w-full h-auto rounded-2xl"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <div className="bg-primary-color text-white px-6 py-3 rounded-full font-bold shadow-lg transform -translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                              Xem chi tiết
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="feature-row flex flex-col md:flex-row justify-between items-center md:items-stretch gap-12 md:gap-10">
+                      <div
+                        className="w-full md:w-1/2 order-2 md:order-1"
+                        data-aos="fade-right"
+                      >
+                        <div className="rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-500 hover:scale-[1.03] hover:rotate-1 relative group">
+                          <div className="absolute inset-0 bg-gradient-to-bl from-primary-color/30 to-transparent mix-blend-overlay opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
+                          <img
+                            src={dotor}
+                            alt="Doctors Team"
+                            className="w-full h-auto rounded-2xl"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <div className="bg-primary-color text-white px-6 py-3 rounded-full font-bold shadow-lg transform -translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                              Gặp đội ngũ chuyên gia
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="w-full md:w-1/2 flex flex-col justify-center order-1 md:order-2"
+                        data-aos="fade-left"
+                      >
+                        <span className="inline-block text-accent-color font-semibold mb-2 text-sm tracking-wider uppercase">
+                          Đội ngũ chuyên môn
+                        </span>
+                        <h3 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-5 leading-tight">
+                          Đội ngũ y bác sĩ chất lượng cao
+                        </h3>
+                        <p className="text-blue-100 mb-6 text-lg leading-relaxed">
+                          Đội ngũ y bác sĩ có thâm niên kinh nghiệm trong việc
+                          thăm khám và điều trị cho trẻ tự kỷ, luôn đặt sự phát
+                          triển của trẻ lên hàng đầu.
+                        </p>
+
+                        <div className="space-y-4 mb-8">
+                          {[
+                            "Cách truyền đạt kiến thức gần gũi và dễ hiểu.",
+                            "Tận tâm chăm sóc và hỗ trợ trẻ trong quá trình điều trị.",
+                            "Sẵn sàng giải đáp và tư vấn cho phụ huynh.",
+                          ].map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center group"
+                              data-aos="fade-up"
+                              data-aos-delay={idx * 100}
+                            >
+                              <div className="bg-accent-color rounded-full p-1.5 mr-4 transform transition-all duration-300 group-hover:scale-110">
+                                <CheckCircle className="text-primary-color h-5 w-5" />
+                              </div>
+                              <span className="text-blue-100 text-lg">
+                                {item}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex flex-wrap gap-4 mt-auto">
+                          <button
+                            className="btn btn-primary bg-white text-primary-color px-6 py-3 rounded-full flex items-center hover:bg-blue-50 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl"
+                            onClick={scrollToTop}
+                          >
+                            Tìm hiểu ngay
+                            <ChevronRight className="ml-2 h-5 w-5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="feature-row flex flex-col-reverse md:flex-row justify-between items-center md:items-stretch gap-12 md:gap-10">
+                      <div
+                        className="w-full md:w-1/2 flex flex-col justify-center"
+                        data-aos="fade-right"
+                      >
+                        <span className="inline-block text-accent-color font-semibold mb-2 text-sm tracking-wider uppercase">
+                          Công nghệ tiên tiến
+                        </span>
+                        <h3 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-5 leading-tight">
+                          Liên tục cập nhật và ứng dụng công nghệ cao
+                        </h3>
+                        <p className="text-blue-100 mb-8 text-lg leading-relaxed">
+                          Sản phẩm sử dụng AI để cá nhân hóa nội dung và lộ
+                          trình học tập theo nhu cầu của từng người dùng. Hệ
+                          thống có khả năng phân tích hành vi, ghi nhận tiến độ
+                          học và tự động gợi ý những bài học hoặc bài tập phù
+                          hợp. Điều này đảm bảo rằng mỗi học sinh đều được học
+                          tập theo cách hiệu quả nhất, giúp tối ưu hóa khả năng
+                          tiếp thu và phát triển.
+                        </p>
+                        <div className="flex flex-wrap gap-4 mt-auto">
+                          <button
+                            className="btn btn-primary bg-white text-primary-color px-6 py-3 rounded-full flex items-center hover:bg-blue-50 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl"
+                            onClick={scrollToTop}
+                          >
+                            Tìm hiểu ngay
+                            <ChevronRight className="ml-2 h-5 w-5" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="w-full md:w-1/2" data-aos="fade-left">
+                        <div className="rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-500 hover:scale-[1.03] hover:rotate-1 relative group">
+                          <div className="absolute inset-0 bg-gradient-to-tr from-primary-color/30 to-transparent mix-blend-overlay opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
+                          <img
+                            src={AI}
+                            alt="Technology"
+                            className="w-full h-auto rounded-2xl"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <div className="bg-primary-color text-white px-6 py-3 rounded-full font-bold shadow-lg transform -translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                              Khám phá công nghệ
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Testimonials */}
+                <section className="w-full py-16 lg:py-20 px-6 md:px-8 bg-gradient-to-b from-blue-50 to-white">
+                  <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-14" data-aos="fade-up">
+                      <span className="inline-block text-primary-color font-semibold mb-2 text-sm tracking-wider uppercase">
+                        Đánh giá từ người dùng
+                      </span>
+                      <h2 className="text-primary-color font-bold text-3xl md:text-5xl mb-4 leading-tight">
+                        Phụ huynh nói gì về chúng tôi
+                      </h2>
+                      <p className="text-gray-700 max-w-2xl mx-auto text-lg">
+                        Những phản hồi từ phụ huynh giúp chúng tôi không ngừng
+                        hoàn thiện dịch vụ để mang đến trải nghiệm tốt nhất cho
+                        trẻ nhỏ.
+                      </p>
+                    </div>
+
+                    <div
+                      className="testimonial-slider relative overflow-hidden rounded-xl px-4"
+                      data-aos="fade-up"
+                    >
+                      <div
+                        className="flex gap-6 transition-all duration-700 ease-in-out"
+                        style={{
+                          transform: `translateX(-${
+                            currentTestimonial * 33.33
+                          }%)`,
+                        }}
+                      >
+                        {testimonials.map((item, index) => (
+                          <div
+                            key={index}
+                            className="testimonial-card min-w-[280px] md:min-w-[350px]"
+                          >
+                            <div className="flex space-x-1 mb-4">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star
+                                  key={star}
+                                  className="text-yellow-400 h-5 w-5 fill-current"
+                                  fill="currentColor"
+                                />
+                              ))}
+                            </div>
+                            <p className="testimonial-quote">{item.quote}</p>
+                            <div className="flex justify-between items-center mt-auto">
+                              <div>
+                                <h4 className="font-bold text-primary-color text-lg">
+                                  {item.name}
+                                </h4>
+                                <p className="text-gray-500">{item.role}</p>
+                              </div>
+                              <div
+                                className={`h-12 w-12 rounded-full flex items-center justify-center ${
+                                  item.gender === "male"
+                                    ? "bg-blue-100"
+                                    : "bg-pink-100"
+                                }`}
+                              >
+                                {item.gender === "male" ? (
+                                  <User className={`h-7 w-7 text-blue-600`} />
+                                ) : (
+                                  <User2 className={`h-7 w-7 text-pink-600`} />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex justify-center mt-8 space-x-3">
+                      {[0, 3, 6, 9].map((index) => (
+                        <button
+                          key={index}
+                          className={`h-3 w-3 rounded-full transition-all duration-300 ${
+                            currentTestimonial === index
+                              ? "bg-primary-color w-10"
+                              : "bg-gray-300 hover:bg-gray-400"
+                          }`}
+                          onClick={() => setCurrentTestimonial(index)}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="flex justify-center mt-12">
+                      <button className="btn btn-primary text-white px-8 py-3 rounded-full flex items-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        Xem tất cả đánh giá
+                        <ChevronRight className="ml-2 h-5 w-5" />
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Footer */}
+                <footer className="footer w-full bg-gradient-to-b from-gray-50 to-white pt-24 pb-8">
+                  <div className="px-6 md:px-8 max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+                      <div
+                        className="md:col-span-1"
+                        data-aos="fade-up"
+                        data-aos-delay="0"
+                      >
+                        <img
+                          src={Logo1}
+                          alt="VRA Logo"
+                          className="mb-6 h-14 transform transition-all duration-300 hover:scale-105"
+                        />
+                        <p className="text-gray-600 mb-6 leading-relaxed">
+                          VRA là một hệ thống hỗ trợ can thiệp sớm cho trẻ tự kỷ
+                          thông qua trải nghiệm thực tế ảo. Web VRA cho phụ
+                          huynh/giáo viên quản lý quá trình học của trẻ.
+                        </p>
+                        <div className="flex space-x-4">
+                          {[
+                            { icon: Facebook, color: "text-blue-600" },
+                            { icon: Twitter, color: "text-blue-400" },
+                            { icon: Instagram, color: "text-pink-600" },
+                            { icon: Linkedin, color: "text-blue-700" },
+                          ].map((social, idx) => (
+                            <a
+                              key={idx}
+                              href="#"
+                              className={`${social.color} p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-300 transform hover:scale-110`}
+                            >
+                              <social.icon className="h-5 w-5" />
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div
+                        className="md:col-span-1"
+                        data-aos="fade-up"
+                        data-aos-delay="100"
+                      >
+                        <h3 className="text-primary-color font-bold text-lg mb-6">
+                          Chăm sóc khách hàng
+                        </h3>
+                        <ul className="space-y-3">
+                          {[
+                            "Hướng dẫn thanh toán",
+                            "Điều kiện giao dịch chung",
+                            "Quy trình sử dụng dịch vụ",
+                            "Chính sách bảo hành",
+                            "Chính sách hoàn trả hàng",
+                            "Chính sách bảo mật",
+                          ].map((item, idx) => (
+                            <li key={idx}>
+                              <a
+                                href="#"
+                                className="footer-link text-gray-600 hover:text-primary-color flex items-center"
+                              >
+                                <ArrowRight className="h-3 w-3 mr-2 text-primary-color" />
+                                <span>{item}</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div
+                        className="md:col-span-1"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                      >
+                        <h3 className="text-primary-color font-bold text-lg mb-6">
+                          Tính năng
+                        </h3>
+                        <ul className="space-y-3">
+                          {[
+                            "Xem thông tin trẻ",
+                            "Quản lý danh sách",
+                            "Cấu hình bài học",
+                          ].map((item, idx) => (
+                            <li key={idx}>
+                              <a
+                                href="#"
+                                className="footer-link text-gray-600 hover:text-primary-color flex items-center"
+                              >
+                                <ArrowRight className="h-3 w-3 mr-2 text-primary-color" />
+                                <span>{item}</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div
+                        className="md:col-span-1"
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                      >
+                        <h3 className="text-primary-color font-bold text-lg mb-6">
+                          Liên hệ với chúng tôi
+                        </h3>
+                        <ul className="space-y-4">
+                          <li>
+                            <a
+                              href="#"
+                              className="text-gray-600 hover:text-primary-color flex items-start group"
+                            >
+                              <MapPin className="h-5 w-5 mr-3 text-primary-color flex-shrink-0 mt-1 group-hover:animate-pulse" />
+                              <span>
+                                268 Lý Thường Kiệt, phường 14, quận 10, Thành
+                                phố Hồ Chí Minh
+                              </span>
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="tel:+84123456789"
+                              className="text-gray-600 hover:text-primary-color flex items-center group"
+                            >
+                              <Phone className="h-5 w-5 mr-3 text-primary-color group-hover:animate-pulse" />
+                              <span>+84 123 456 789</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="mailto:support@vrahealth.com"
+                              className="text-gray-600 hover:text-primary-color flex items-center group"
+                            >
+                              <Mail className="h-5 w-5 mr-3 text-primary-color group-hover:animate-pulse" />
+                              <span>support@vrahealth.com</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="footer-divider mt-16 mb-8"></div>
+
+                    <div className="flex flex-col md:flex-row justify-between items-center">
+                      <p className="text-gray-500 text-sm mb-4 md:mb-0">
+                        © 2023 VRA Health. Tất cả các quyền được bảo lưu.
+                      </p>
+                      <div className="flex space-x-6">
+                        <a
+                          href="#"
+                          className="text-gray-500 hover:text-primary-color text-sm transition-colors duration-300"
+                        >
+                          Điều khoản sử dụng
+                        </a>
+                        <a
+                          href="#"
+                          className="text-gray-500 hover:text-primary-color text-sm transition-colors duration-300"
+                        >
+                          Chính sách bảo mật
+                        </a>
+                        <a
+                          href="#"
+                          className="text-gray-500 hover:text-primary-color text-sm transition-colors duration-300"
+                        >
+                          Trợ giúp
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </footer>
+
+                {/* Register Form Modal */}
+                {showRegisterForm && (
+                  <div
+                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal-overlay"
+                    onClick={() => setShowRegisterForm(false)}
+                  >
+                    <div
+                      className={`bg-white p-8 rounded-3xl w-[95%] max-w-[480px] relative border-4 border-primary-color shadow-2xl modal ${
+                        showRegisterForm ? "modal-visible" : ""
+                      }`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        onClick={() => setShowRegisterForm(false)}
+                        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-300 transform hover:rotate-90 p-1"
+                      >
+                        <X className="h-6 w-6" />
+                      </button>
+
+                      <div className="text-center mb-6">
+                        <span className="inline-block text-primary-color font-semibold mb-1 text-sm tracking-wider uppercase">
+                          Tạo tài khoản mới
+                        </span>
+                        <h2 className="text-gray-900 text-2xl font-bold mb-1">
+                          Đăng ký tài khoản
+                        </h2>
+                        <p className="text-gray-600 text-sm">
+                          Tham gia cùng cộng đồng để hỗ trợ trẻ phát triển toàn
+                          diện
+                        </p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="form-input flex items-center border-2 border-gray-300 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                          <User className="h-5 w-5 text-gray-400 mr-3" />
+                          <input
+                            type="text"
+                            name="fullName"
+                            placeholder="Họ và tên*"
+                            value={registerData.fullName}
+                            onChange={handleRegisterChange}
+                            className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="form-input flex items-center border-2 border-gray-300 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                          <Mail className="h-5 w-5 text-gray-400 mr-3" />
+                          <input
+                            type="email"
+                            name="email"
+                            placeholder="Email*"
+                            value={registerData.email}
+                            onChange={handleRegisterChange}
+                            className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="form-input flex items-center border-2 border-gray-300 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                          <Phone className="h-5 w-5 text-gray-400 mr-3" />
+                          <input
+                            type="tel"
+                            name="phone"
+                            placeholder="Số điện thoại*"
+                            value={registerData.phone}
+                            onChange={handleRegisterChange}
+                            className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="form-input flex items-center border-2 border-gray-300 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                          <Eye className="h-5 w-5 text-gray-400 mr-3" />
+                          <input
+                            type="password"
+                            name="password"
+                            placeholder="Mật khẩu*"
+                            value={registerData.password}
+                            onChange={handleRegisterChange}
+                            className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="form-input flex items-center border-2 border-gray-300 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                          <Eye className="h-5 w-5 text-gray-400 mr-3" />
+                          <input
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="Xác nhận mật khẩu*"
+                            value={registerData.confirmPassword}
+                            onChange={handleRegisterChange}
+                            className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                          />
+                        </div>
+
+                        <button
+                          className="btn btn-primary text-white font-bold w-full py-3 rounded-lg flex items-center justify-center hover:bg-primary-light transform hover:scale-[1.02] transition-all duration-300 shadow-md hover:shadow-lg mt-4"
+                          onClick={() => {
+                            // Xử lý đăng ký ở đây
+                            alert("Đăng ký thành công!");
+                            setShowRegisterForm(false);
+                          }}
+                        >
+                          <Heart className="mr-2 h-5 w-5" />
+                          Tạo tài khoản
+                        </button>
+                      </div>
+
+                      <div className="text-center mt-6 text-gray-500 text-xs">
+                        Bằng việc đăng ký, bạn đồng ý với{" "}
+                        <a
+                          href="#"
+                          className="text-primary-color hover:underline"
+                        >
+                          Điều khoản sử dụng
+                        </a>{" "}
+                        và{" "}
+                        <a
+                          href="#"
+                          className="text-primary-color hover:underline"
+                        >
+                          Chính sách bảo mật
+                        </a>{" "}
+                        của chúng tôi.
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          }
+        />
       </Routes>
     </Router>
   );

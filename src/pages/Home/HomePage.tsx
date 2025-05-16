@@ -220,7 +220,7 @@ const HomePage: React.FC = () => {
                                         <span className="block mt-2">
                                             cho em trẻ mắc chứng
                                         </span>
-                                        <span className="text-accent-color">tự kỷ</span>
+                                        <span style={{ color: '#50EDD1' }}>tự kỷ</span>
                                     </h1>
                                 </div>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
@@ -10,7 +10,28 @@ import HomePage from "./pages/Home/HomePage";
  * Main application component with routing configuration
  * Using nested routes with MainLayout as the parent layout
  */
-export default function App() {
+function App() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Xử lý logic đăng ký ở đây
+    console.log('Form submitted:', formData);
+  };
+
   return (
     <Router>
       <Routes>
@@ -28,3 +49,5 @@ export default function App() {
     </Router>
   );
 }
+
+export default App;

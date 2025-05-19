@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { Logo1 } from "../../assets/images";
 
 interface HeaderProps {
   scrollToLoginForm: () => void;
   setShowRegisterForm: (show: boolean) => void;
+  isLoggedIn?: boolean;
+  user?: {
+    username: string;
+    avatar?: string;
+  };
+  onLogout?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ scrollToLoginForm, setShowRegisterForm }) => {
+const Header: React.FC<HeaderProps> = ({ 
+  scrollToLoginForm, 
+  setShowRegisterForm,
+  isLoggedIn = false,
+  user,
+  onLogout
+}) => {
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const location = useLocation();
@@ -77,19 +89,39 @@ const Header: React.FC<HeaderProps> = ({ scrollToLoginForm, setShowRegisterForm 
               </button>
             </div>
           </div>
-          <div className="hidden md:flex items-center space-x-4">
-            <button 
-              className="btn text-primary-color font-semibold px-4 py-1.5 rounded-full transition-all duration-300"
-              onClick={scrollToLoginForm}
-            >
-              Đăng nhập
-            </button>
-            <button 
-              className="btn btn-primary text-white font-semibold px-5 py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-              onClick={() => setShowRegisterForm(true)}
-            >
-              Đăng ký
-            </button>
+          
+          <div className="flex items-center space-x-4">
+            {!isLoggedIn ? (
+              <>
+                <button 
+                  className="btn text-primary-color font-semibold px-4 py-1.5 rounded-full transition-all duration-300"
+                  onClick={scrollToLoginForm}
+                >
+                  Đăng nhập
+                </button>
+                <button 
+                  className="btn btn-primary text-white font-semibold px-5 py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={() => setShowRegisterForm(true)}
+                >
+                  Đăng ký
+                </button>
+              </>
+            ) : (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 bg-primary-color/10 px-4 py-2 rounded-full">
+                  <div className="h-8 w-8 rounded-full bg-primary-color flex items-center justify-center">
+                    <User className="h-5 w-5 text-white" />
+                  </div>
+                  <span className="text-primary-color font-medium">{user?.username}</span>
+                </div>
+                <button
+                  onClick={onLogout}
+                  className="btn text-primary-color border-2 border-primary-color font-semibold px-4 py-1.5 rounded-full transition-all duration-300 hover:bg-primary-color hover:text-white"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </div>
+            )}
           </div>
           <button 
             className="md:hidden text-gray-800 p-2"
@@ -148,24 +180,47 @@ const Header: React.FC<HeaderProps> = ({ scrollToLoginForm, setShowRegisterForm 
                 Quản lý cấu hình
               </button>
               <div className="pt-4 flex flex-col space-y-3">
-                <button 
-                  className="bg-white text-primary-color border-2 border-primary-color font-bold w-full py-2.5 rounded-full"
-                  onClick={() => {
-                    scrollToLoginForm();
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  Đăng nhập
-                </button>
-                <button 
-                  className="bg-primary-color text-white font-bold w-full py-2.5 rounded-full"
-                  onClick={() => {
-                    setShowRegisterForm(true);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  Đăng ký
-                </button>
+                {!isLoggedIn ? (
+                  <>
+                    <button 
+                      className="bg-white text-primary-color border-2 border-primary-color font-bold w-full py-2.5 rounded-full"
+                      onClick={() => {
+                        scrollToLoginForm();
+                        setShowMobileMenu(false);
+                      }}
+                    >
+                      Đăng nhập
+                    </button>
+                    <button 
+                      className="bg-primary-color text-white font-bold w-full py-2.5 rounded-full"
+                      onClick={() => {
+                        setShowRegisterForm(true);
+                        setShowMobileMenu(false);
+                      }}
+                    >
+                      Đăng ký
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center gap-2 bg-primary-color/10 px-4 py-2 rounded-full">
+                      <div className="h-8 w-8 rounded-full bg-primary-color flex items-center justify-center">
+                        <User className="h-5 w-5 text-white" />
+                      </div>
+                      <span className="text-primary-color font-medium">{user?.username}</span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        onLogout?.();
+                        setShowMobileMenu(false);
+                      }}
+                      className="bg-white text-primary-color border-2 border-primary-color font-bold w-full py-2.5 rounded-full flex items-center justify-center gap-2"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      <span>Đăng xuất</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -9,6 +9,8 @@ import Footer from '../components/Footer/Footer';
  */
 function MainLayout() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<{ username: string; avatar?: string } | null>(null);
   const location = useLocation();
 
   // Reset scroll position when the route changes
@@ -34,16 +36,33 @@ function MainLayout() {
     }
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUser(null);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header 
         scrollToLoginForm={scrollToLoginForm}
         setShowRegisterForm={setShowRegisterForm}
+        isLoggedIn={isLoggedIn}
+        user={user || undefined}
+        onLogout={handleLogout}
       />
       
       {/* Main Content - Will be replaced by the matched route */}
       <main className="flex-grow pt-20">
-        <Outlet context={{ showRegisterForm, setShowRegisterForm, scrollToTop, scrollToLoginForm }} />
+        <Outlet context={{ 
+          showRegisterForm, 
+          setShowRegisterForm, 
+          scrollToTop, 
+          scrollToLoginForm,
+          isLoggedIn,
+          setIsLoggedIn,
+          user,
+          setUser
+        }} />
       </main>
       
       <Footer />

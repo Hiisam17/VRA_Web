@@ -9,6 +9,7 @@ import {
     User,
     User2,
     ArrowRight,
+    LogOut,
 } from "lucide-react";
 import { anh1, anh2, anh3, Manage, dotor, AI, googleLogo } from "../../assets/images";
 import RegisterForm, { RegisterFormData } from "../../components/Auth/RegisterForm";
@@ -19,11 +20,30 @@ type MainLayoutContext = {
     setShowRegisterForm: (show: boolean) => void;
     scrollToTop: () => void;
     scrollToLoginForm: () => void;
+    isLoggedIn: boolean;
+    setIsLoggedIn: (isLoggedIn: boolean) => void;
+    user: { username: string; avatar?: string } | null;
+    setUser: (user: { username: string; avatar?: string } | null) => void;
+};
+
+// Add User type
+type UserType = {
+    username: string;
+    avatar?: string;
 };
 
 const HomePage: React.FC = () => {
     // Get context from MainLayout
-    const { showRegisterForm, setShowRegisterForm, scrollToTop, scrollToLoginForm } = useOutletContext<MainLayoutContext>();
+    const { 
+        showRegisterForm, 
+        setShowRegisterForm, 
+        scrollToTop, 
+        scrollToLoginForm,
+        isLoggedIn,
+        setIsLoggedIn,
+        user,
+        setUser
+    } = useOutletContext<MainLayoutContext>();
 
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
@@ -206,6 +226,27 @@ const HomePage: React.FC = () => {
         setShowRegisterForm(false);
     };
 
+    const handleLogin = () => {
+        // Here you would typically make an API call to verify credentials
+        // For now, we'll just simulate a successful login
+        if (username && password) {
+            setIsLoggedIn(true);
+            setUser({
+                username: username,
+                avatar: undefined // You can add a default avatar or get it from the API
+            });
+            setUsername("");
+            setPassword("");
+        } else {
+            alert("Vui lòng nhập đầy đủ thông tin đăng nhập!");
+        }
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        setUser(null);
+    };
+
     return (
         <div className="flex flex-col items-start bg-white relative">
             <div className="w-full main-content">
@@ -263,110 +304,151 @@ const HomePage: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Login Card */}
-                            <div
-                                id="login-form"
-                                className="w-full md:w-5/12 mt-8 md:mt-0 hero-login-container animate-slideInRight"
-                            >
-                                <div className="bg-white/10 backdrop-blur-lg p-2 md:p-3 rounded-3xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
-                                    <div className="bg-white p-6 rounded-2xl">
-                                        <h2 className="text-gray-900 text-xl font-bold mb-5">
-                                            Học giao tiếp và khám phá thế giới với VRA
-                                        </h2>
-
-                                        <div className="space-y-4 mb-5">
-                                            <div className="form-input flex items-center border-2 border-gray-200 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
-                                                <User className="h-5 w-5 text-gray-400 mr-3" />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Tên tài khoản*"
-                                                    value={username}
-                                                    onChange={(e) => setUsername(e.target.value)}
-                                                    className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
-                                                />
+                            {/* Right side content */}
+                            <div className="w-full md:w-1/2 mt-8 md:mt-0">
+                                {isLoggedIn ? (
+                                    <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl animate-slideInRight">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="h-16 w-16 rounded-full bg-primary-color flex items-center justify-center">
+                                                <User className="h-8 w-8 text-white" />
                                             </div>
-
-                                            <div className="space-y-2">
-                                                <div className="form-input flex items-center border-2 border-gray-200 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
-                                                    <input
-                                                        type={showPassword ? "text" : "password"}
-                                                        placeholder="Mật khẩu*"
-                                                        value={password}
-                                                        onChange={(e) =>
-                                                            setPassword(e.target.value)
-                                                        }
-                                                        className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
-                                                    />
-                                                    <button
-                                                        onClick={() =>
-                                                            setShowPassword(!showPassword)
-                                                        }
-                                                        className="text-gray-500 hover:text-primary-color transition-colors duration-300"
-                                                    >
-                                                        {showPassword ? (
-                                                            <Eye className="h-5 w-5" />
-                                                        ) : (
-                                                            <EyeOff className="h-5 w-5" />
-                                                        )}
-                                                    </button>
-                                                </div>                                <div className="text-right">
-                                                    <button
-                                                        className="text-primary-color text-sm hover:underline transition-all duration-300 border-none bg-transparent cursor-pointer"
-                                                        onClick={() => alert("Chức năng đang được phát triển")}
-                                                    >
-                                                        Quên mật khẩu?
-                                                    </button>
-                                                </div>
+                                            <div>
+                                                <h3 className="text-white text-xl font-bold">{user?.username}</h3>
+                                                <p className="text-blue-100">Tài khoản đã xác thực</p>
                                             </div>
-
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                            <div className="bg-white/5 p-4 rounded-xl">
+                                                <h4 className="text-white font-semibold mb-2">Buổi học đã tham gia</h4>
+                                                <p className="text-2xl text-white font-bold">12</p>
+                                            </div>
+                                            <div className="bg-white/5 p-4 rounded-xl">
+                                                <h4 className="text-white font-semibold mb-2">Điểm trung bình</h4>
+                                                <p className="text-2xl text-white font-bold">8.5</p>
+                                            </div>
+                                            <div className="bg-white/5 p-4 rounded-xl">
+                                                <h4 className="text-white font-semibold mb-2">Thời gian học</h4>
+                                                <p className="text-2xl text-white font-bold">24h</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-end">
                                             <button
-                                                className="btn btn-primary text-white font-bold w-full py-3 rounded-lg hover:bg-primary-light transform hover:scale-[1.02] transition-all duration-300 shadow-md hover:shadow-lg"
-                                                onClick={() => alert("Đăng nhập thành công!")}
+                                                onClick={handleLogout}
+                                                className="btn text-white border-2 border-white font-bold px-6 py-2 rounded-full transition-all duration-500 hover:bg-white/10"
                                             >
-                                                Đăng nhập
+                                                <LogOut className="h-5 w-5 inline-block mr-2" />
+                                                Đăng xuất
                                             </button>
-                                        </div>
-
-                                        <div className="mb-5">
-                                            <div className="flex items-center mb-3">
-                                                <span className="text-gray-500 text-sm mr-2">
-                                                    Hoặc tiếp tục với
-                                                </span>
-                                                <div className="h-px bg-gray-300 flex-1"></div>
-                                            </div>
-
-                                            <button className="bg-gray-100 w-full py-3 rounded-lg flex items-center justify-center hover:bg-gray-200 transform hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-md">
-                                                <img
-                                                    src={googleLogo}
-                                                    alt="Google"
-                                                    className="h-5 w-5 mr-2"
-                                                />
-                                                <span className="text-gray-700">
-                                                    Đăng nhập với Google
-                                                </span>
-                                            </button>
-                                        </div>
-
-                                        <div className="text-center mb-4">                              <span className="text-gray-900 text-sm">
-                                            Nếu bạn chưa có tài khoản, vui lòng{" "}
-                                            <button
-                                                className="text-primary-color font-semibold hover:underline transition-all duration-300 border-none bg-transparent cursor-pointer p-0"
-                                                onClick={() => setShowRegisterForm(true)}
-                                            >
-                                                Đăng ký
-                                            </button>
-                                        </span>
-                                        </div>
-
-                                        <div className="text-center">
-                                            <div className="h-px bg-gray-300 w-full mb-3"></div>
-                                            <p className="text-gray-700 text-xs">
-                                                Trang này được bảo vệ bởi reCAPTCHA và áp dụng
-                                                Điều khoản sử dụng.
-                                            </p>
                                         </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <div
+                                        id="login-form"
+                                        className="hero-login-container animate-slideInRight"
+                                    >
+                                        <div className="bg-white/10 backdrop-blur-lg p-2 md:p-3 rounded-3xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
+                                            <div className="bg-white p-6 rounded-2xl">
+                                                <h2 className="text-gray-900 text-xl font-bold mb-5">
+                                                    Học giao tiếp và khám phá thế giới với VRA
+                                                </h2>
+
+                                                <div className="space-y-4 mb-5">
+                                                    <div className="form-input flex items-center border-2 border-gray-200 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                                                        <User className="h-5 w-5 text-gray-400 mr-3" />
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Tên tài khoản*"
+                                                            value={username}
+                                                            onChange={(e) => setUsername(e.target.value)}
+                                                            className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                                                        />
+                                                    </div>
+
+                                                    <div className="space-y-2">
+                                                        <div className="form-input flex items-center border-2 border-gray-200 rounded-lg px-4 py-3 focus-within:border-primary-color transition-all duration-300">
+                                                            <input
+                                                                type={showPassword ? "text" : "password"}
+                                                                placeholder="Mật khẩu*"
+                                                                value={password}
+                                                                onChange={(e) =>
+                                                                    setPassword(e.target.value)
+                                                                }
+                                                                className="flex-1 text-gray-800 bg-transparent border-0 focus:outline-none"
+                                                            />
+                                                            <button
+                                                                onClick={() =>
+                                                                    setShowPassword(!showPassword)
+                                                                }
+                                                                className="text-gray-500 hover:text-primary-color transition-colors duration-300"
+                                                            >
+                                                                {showPassword ? (
+                                                                    <Eye className="h-5 w-5" />
+                                                                ) : (
+                                                                    <EyeOff className="h-5 w-5" />
+                                                                )}
+                                                            </button>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <button
+                                                                className="text-primary-color text-sm hover:underline transition-all duration-300 border-none bg-transparent cursor-pointer"
+                                                                onClick={() => alert("Chức năng đang được phát triển")}
+                                                            >
+                                                                Quên mật khẩu?
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <button
+                                                        className="btn btn-primary text-white font-bold w-full py-3 rounded-lg hover:bg-primary-light transform hover:scale-[1.02] transition-all duration-300 shadow-md hover:shadow-lg"
+                                                        onClick={handleLogin}
+                                                    >
+                                                        Đăng nhập
+                                                    </button>
+                                                </div>
+
+                                                <div className="mb-5">
+                                                    <div className="flex items-center mb-3">
+                                                        <span className="text-gray-500 text-sm mr-2">
+                                                            Hoặc tiếp tục với
+                                                        </span>
+                                                        <div className="h-px bg-gray-300 flex-1"></div>
+                                                    </div>
+
+                                                    <button className="bg-gray-100 w-full py-3 rounded-lg flex items-center justify-center hover:bg-gray-200 transform hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-md">
+                                                        <img
+                                                            src={googleLogo}
+                                                            alt="Google"
+                                                            className="h-5 w-5 mr-2"
+                                                        />
+                                                        <span className="text-gray-700">
+                                                            Đăng nhập với Google
+                                                        </span>
+                                                    </button>
+                                                </div>
+
+                                                <div className="text-center mb-4">
+                                                    <span className="text-gray-900 text-sm">
+                                                        Nếu bạn chưa có tài khoản, vui lòng{" "}
+                                                        <button
+                                                            className="text-primary-color font-semibold hover:underline transition-all duration-300 border-none bg-transparent cursor-pointer p-0"
+                                                            onClick={() => setShowRegisterForm(true)}
+                                                        >
+                                                            Đăng ký
+                                                        </button>
+                                                    </span>
+                                                </div>
+
+                                                <div className="text-center">
+                                                    <div className="h-px bg-gray-300 w-full mb-3"></div>
+                                                    <p className="text-gray-700 text-xs">
+                                                        Trang này được bảo vệ bởi reCAPTCHA và áp dụng
+                                                        Điều khoản sử dụng.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
